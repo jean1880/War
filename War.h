@@ -178,6 +178,59 @@ class War {
 		}
 
 		/**
+		 * Checks if a players deck is empty to see if a player has won
+		 * @method CheckDecks
+		 **/
+		void CheckDecks(){
+			string input;
+			if (PlayerDeck.size() == 0){
+				cout
+					<< "\******************* LOSE *******************/" << endl
+					<< "\* " << setfill(' ') << setw(10) << playerName << ": " << setfill(' ') << setw(2) << PlayerDeck.size() << "                             */" << endl
+					<< "\* CPU: " << setfill(' ') << setw(2) << CPUDeck.size() << "                                  */" << endl
+					<< "\********************************************/" << endl;
+			}
+			else if (CPUDeck.size() == 0){
+				cout
+					<< "\******************* WIN ********************/" << endl
+					<< "\* " << setfill(' ') << setw(10) << playerName << ": " << setfill(' ') << setw(2) << PlayerDeck.size() << "                             */" << endl
+					<< "\* CPU: " << setfill(' ') << setw(2) << CPUDeck.size() << "                                  */" << endl
+					<< "\********************************************/" << endl;
+			}
+			else{
+				// neither player has won  the game, exit the method
+				return;
+			}
+
+			// check if player wants to play again
+			CheckRestart();
+		}
+
+		/**
+		 * Checks if the player wants to restart or exit the game
+		 * @method CheckRestart
+		 **/
+		void CheckRestart(){
+			cout << "Play again?  (y/n):" << endl;
+			cin >> input;
+
+			// convert input to string lower
+			transform(input.begin(), input.end(), input.begin(), ::tolower);
+
+			// check decision
+			if (input == "y" || input == "yes"){
+				initialize = true;
+			}
+			else if (input == "n" || input == "no"){
+				exit = true;
+			}
+			else{
+				cout << "please type 'y' or 'n'" << endl;
+				CheckRestart();
+			}
+		}
+
+		/**
 		 * Take both players cards and add them to the current winnings card pool, and remove from their deck
 		 * @method AddToCardPool
 		 **/
@@ -225,8 +278,8 @@ class War {
 		void DisplayScore(){
 			cout
 				<< "\****************** SCORE *******************/" << endl
-				<< "\* Player: " << setfill('0') << setw(2) << PlayerDeck.size() << "                               */" << endl
-				<< "\* CPU: " << setfill('0') << setw(2) << CPUDeck.size() << "                                  */" << endl
+				<< "\* " << setfill(' ') << setw(10) << playerName << ": " << setfill(' ') << setw(2) << PlayerDeck.size() << "                             */" << endl
+				<< "\* CPU: " << setfill(' ') << setw(2) << CPUDeck.size() << "                                  */" << endl
 				<< "\********************************************/" << endl;
 
 		}
