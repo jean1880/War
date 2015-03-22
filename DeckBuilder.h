@@ -5,7 +5,6 @@
 *      Author: jdesroches
 */
 
-#include <iostream>
 #include "IntArrayShuffle.h"
 #include "Card.h"
 
@@ -33,7 +32,6 @@ public:
 
 private:
 	Card Deck[52];
-	int count();
 	void BuildSuite();
 
 	/**
@@ -68,7 +66,7 @@ private:
 		int SuiteSize = 13;
 
 		for (int i = 0; i < SuiteSize; i++){
-			// create card to be inserted into the deck
+			// card to be inserted into the deck
 			Card newCard;
 			newCard.suite = suite;
 			newCard.value = i;
@@ -100,28 +98,6 @@ private:
 			else{
 				PlayerDeck[i] = Deck[card[i]];
 			}
-		}
-		for (int i = 0; i < ARRAY_SIZE(Deck); i++){
-			// temporarily spew results
-			if (i == 0){
-				std::cout << "Player's Deck" << std::endl;
-			}
-			else if (i == 26){
-				std::cout << "CPU's Deck" << std::endl;
-			}
-			if (i < 26){
-				std::cout << PlayerDeck[i].charValue
-					<< " of " << PlayerDeck[i].suite
-					<< "=" << PlayerDeck[i].value
-					<< std::endl;
-			}
-			else{
-				std::cout << CPUDeck[i - 26].charValue
-					<< " of " << CPUDeck[i - 26].suite
-					<< "=" << CPUDeck[i - 26].value
-					<< std::endl;
-			}
-
 		}
 	}
 };
