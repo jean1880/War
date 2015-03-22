@@ -7,11 +7,12 @@
 
 #include "IntArrayShuffle.h"
 #include "Card.h"
+#include <queue>
 
 #ifndef DECKBUILDER_H_
 #define CARD_H_
 #define ARRAY_SIZE(array) (sizeof((array))/sizeof((array[0])))
-
+using namespace std;
 class DeckBuilder
 {
 public:
@@ -25,7 +26,7 @@ public:
 	 * @method GetDecks
 	 * @param 
 	**/
-	void GetDecks(Card(&PlayerDeck)[26], Card(&CPUDeck)[26]){
+	void GetDecks(queue <Card> &PlayerDeck,	queue <Card> &CPUDeck){
 		BuildDeck();
 		DealDeck(PlayerDeck, CPUDeck);
 	}
@@ -82,9 +83,10 @@ private:
 	* Shuffles the deck
 	* @method ShuffleDeck
 	*/
-	void DealDeck(Card (&PlayerDeck)[26], Card (&CPUDeck)[26]){
+	void DealDeck(queue <Card> &PlayerDeck, queue <Card> &CPUDeck){
 		// shuffle the deck int values
 		int card[52];
+
 		for (int i = 0; i < (ARRAY_SIZE(Deck)); i++){
 			card[i] = i;
 		}
@@ -92,11 +94,11 @@ private:
 
 		// deal cards to player and CPU
 		for (int i = 0; i < ARRAY_SIZE(Deck); i++){
-			if (i > 26){
-				CPUDeck[i - 26] = Deck[card[i]];
+			if (i > 25){
+				CPUDeck.push(Deck[card[i]]);
 			}
 			else{
-				PlayerDeck[i] = Deck[card[i]];
+				PlayerDeck.push(Deck[card[i]]);
 			}
 		}
 	}

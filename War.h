@@ -7,9 +7,11 @@
 #include "DeckBuilder.h"
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
 #include <chrono>
 #include <thread>
+#include <queue>
 
 #ifndef WAR_H_
 #define WAR_H_
@@ -64,9 +66,9 @@ class War {
 	private:
 		string input;
 		string playerName;
-		Card PlayerDeck[26];
-		Card CPUDeck[26];
-		int round = 0;
+		queue <Card> PlayerDeck;
+		queue <Card> CPUDeck;
+		queue <Card> CardPool;
 		bool initialize = true;
 		bool exit = false;
 
@@ -90,7 +92,7 @@ class War {
 		}
 
 		/**
-		* Checks what action the player is taking
+		* Checks what action the player wishes to take
 		* @method PlayerInteraction
 		**/
 		void PlayerInteraction(string input){
@@ -103,6 +105,9 @@ class War {
 			}
 			else if (input == "-h" || input == "--help"){
 				DisplayHelpDoc();
+			}
+			else if (input == "-s" || input == "--size"){
+				DisplayScore();
 			}
 			else if (input == "-r" || input == "--restart"){
 				initialize = true;
@@ -127,9 +132,6 @@ class War {
 
 				// run playthrough
 				CheckWinner();
-
-				// iterate round
-				round++;
 			}
 			catch (exception e){
 				throw;
@@ -141,9 +143,9 @@ class War {
 		* @method OutputPlay
 		**/
 		void OutputPlay(){
-			cout << playerName << " plays " << PlayerDeck[round].charValue << " of " << PlayerDeck[round].suite << endl;
+			cout << playerName << " plays " << PlayerDeck.front().charValue << " of " << PlayerDeck.front().suite << endl;
 			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-			cout << "Computer plays " << CPUDeck[round].charValue << " of " << CPUDeck[round].suite << endl;
+			cout << "Computer plays " << CPUDeck.front().charValue << " of " << CPUDeck.front().suite << endl;
 		}
 
 		/**
@@ -151,17 +153,52 @@ class War {
 		* @method CheckWinner
 		**/
 		void CheckWinner(){
-			if (PlayerDeck[round].value > CPUDeck[round].value){
+			if (PlayerDeck.front().value > CPUDeck.front().value){
 				cout << "You Win!!" << endl;
+
+				// build card pool and pass pool to player
+				AddToCardPool();
+				RewardWinner(PlayerDeck);
 			}
-			else if (PlayerDeck[round].value < CPUDeck[round].value){
+			else if (PlayerDeck.front().value < CPUDeck.front().value){
 				cout << "You Lose!!" << endl;
+
+
+				// build card pool and pass pool to CPU
+				AddToCardPool();
+				RewardWinner(CPUDeck);
 			}
 			else{
-				cout << "Tie!!" << endl;
-				// iterate round
-				round++;
+				cout << "WAR!!" << endl;
+				AddToCardPool();
+				
+				// play another round to look for a winner
 				PlayRound();
+			}
+		}
+
+		/**
+		 * Take both players cards and add them to the current winnings card pool, and remove from their deck
+		 * @method AddToCardPool
+		 **/
+		void AddToCardPool(){
+			// add both cards to the card pool to be collected on victory
+			CardPool.push(PlayerDeck.front());
+			PlayerDeck.pop();
+
+			CardPool.push(CPUDeck.front());
+			CPUDeck.pop();
+		}
+
+		/**
+		 * Passes the current card pool into the winners deck
+		 * @method RewardWinner
+		 **/
+		void RewardWinner(queue <Card> &WinnerDeck){
+			// take all the cards in the card pool and pass to the winning deck
+			while (CardPool.size() > 0){
+				WinnerDeck.push(CardPool.front());
+				CardPool.pop();
 			}
 		}
 
@@ -177,7 +214,21 @@ class War {
 				<< "\*         -e, --exit:  Exits the game      */" << endl
 				<< "\*         -r, --restart: Restarts the game */" << endl
 				<< "\*         -p, --play:    Plays next card   */" << endl
+				<< "\*         -s, --score:   Show current score*/" << endl
 				<< "\********************************************/" << endl;			
+		}
+
+		/**
+		 * Displays number of cards in each players deck to report current standings
+		 * @method DisplayScore
+		 **/
+		void DisplayScore(){
+			cout
+				<< "\****************** SCORE *******************/" << endl
+				<< "\* Player: " << setfill('0') << setw(2) << PlayerDeck.size() << "                               */" << endl
+				<< "\* CPU: " << setfill('0') << setw(2) << CPUDeck.size() << "                                  */" << endl
+				<< "\********************************************/" << endl;
+
 		}
 };
 
