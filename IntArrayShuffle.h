@@ -14,10 +14,10 @@
 
 class IntArrayShuffle{
 public:
-	IntArrayShuffle();
+	IntArrayShuffle(){};
 	// A function to generate a random permutation of arr[]
 	template<int N> 
-	static void randomize ( int (&arr)[N])
+	void randomize ( int (&arr)[N])
 	{
 		// Use a different seed value so that we don't get same
 		// result each time we run this program
@@ -38,7 +38,7 @@ public:
 	}
 private:
 	// A utility function to swap to integers
-	static void swap (int *a, int *b)
+	void swap (int *a, int *b)
 	{
 		int temp = *a;
 		*a = *b;

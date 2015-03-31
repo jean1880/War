@@ -63,6 +63,8 @@ class War {
 			// Notify App has now ended
 			cout<<"Exiting War";
 		};
+
+		
 	private:
 		string input;
 		string playerName;
@@ -168,7 +170,7 @@ class War {
 				AddToCardPool();
 				RewardWinner(CPUDeck);
 			}
-			else{
+			else if (PlayerDeck.front() == CPUDeck.front()){
 				cout << "WAR!!" << endl;
 				AddToCardPool();
 				

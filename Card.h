@@ -13,6 +13,11 @@ struct Card{
 	int value;
 	char *suite;
 	char *charValue;
+
+	bool operator == (const Card &card) const
+	{
+		return (value == card.value);
+	}
 };
 
 char *CardCharValue[14] = {

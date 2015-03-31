@@ -90,7 +90,8 @@ private:
 		for (int i = 0; i < (ARRAY_SIZE(Deck)); i++){
 			card[i] = i;
 		}
-		IntArrayShuffle::randomize(card);
+		IntArrayShuffle *shuffler = new IntArrayShuffle();
+		shuffler->randomize(card);
 
 		// deal cards to player and CPU
 		for (int i = 0; i < ARRAY_SIZE(Deck); i++){
@@ -101,6 +102,8 @@ private:
 				PlayerDeck.push(Deck[card[i]]);
 			}
 		}
+
+		delete shuffler;
 	}
 };
 
